@@ -21,14 +21,16 @@ function App() {
           <CssBaseline />
           <Router>
             <Routes>
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/" element={<Register />} />
-              
+
               {/* Protected Admin Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/admin" element={<Dashboard />} />
-                <Route path="/participants/:eventId" element={<ParticipantsAdminPage />} />
+                <Route
+                  path="/participants/:eventId"
+                  element={<ParticipantsAdminPage />}
+                />
               </Route>
 
               {/* Public Routes */}

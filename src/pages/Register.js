@@ -145,7 +145,7 @@ const Register = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -164,7 +164,7 @@ const Register = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility}>
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -183,7 +183,7 @@ const Register = () => {
 
           <Typography sx={{ mt: 2 }}>
             Already have an account?{" "}
-            <Link component={Link} to="/login">
+            <Link component={Link} to="/">
               Login
             </Link>
           </Typography>
