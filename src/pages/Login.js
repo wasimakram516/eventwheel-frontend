@@ -106,7 +106,11 @@ const Login = () => {
           Welcome Back! Please Login to create an Event.
         </Typography>
 
-
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {success}
+          </Alert>
+        )}
         <Box component="form" onSubmit={onSubmit}>
           <TextField
             name="email"
@@ -132,7 +136,7 @@ const Login = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
