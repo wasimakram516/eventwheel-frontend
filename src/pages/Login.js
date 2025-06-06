@@ -105,12 +105,7 @@ const Login = () => {
         <Typography variant="h6" sx={{ my: 2, color: "text.secondary" }}>
           Welcome Back! Please Login to create an Event.
         </Typography>
-        
-        {success && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {success}
-          </Alert>
-        )}
+
 
         <Box component="form" onSubmit={onSubmit}>
           <TextField
@@ -137,7 +132,7 @@ const Login = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={togglePasswordVisibility} edge="end">
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
