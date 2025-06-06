@@ -57,7 +57,7 @@ const Register = () => {
     try {
       await handleRegister(form.name, form.email, form.password);
       setSuccess("Login successful!");
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       // For Joi validation errors (400 status)
       if (err.response?.status === 400) {
