@@ -15,7 +15,7 @@ import {
   Delete as DeleteIcon,
   People as PeopleIcon,
   Add as AddIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
 } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -105,7 +105,7 @@ const ParticipantsAdminPage = () => {
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        position:"relative",
+        position: "relative",
         p: 4,
       }}
     >
@@ -125,7 +125,6 @@ const ParticipantsAdminPage = () => {
         <IconButton>
           <HomeIcon fontSize="large" sx={{ color: "primary.main" }} />
         </IconButton>
-        
       </Box>
       <Typography variant="h4" fontWeight="bold" textAlign="center">
         Welcome to {event.name}
