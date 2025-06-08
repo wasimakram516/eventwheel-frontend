@@ -11,6 +11,7 @@ import ParticipantsUserPage from "./pages/ParticipantsUserPage";
 import SpinningPage from "./pages/SpinningPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import theme from "./styles/theme";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
           <CssBaseline />
           <Router>
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/" element={<Register />} />
               
               {/* Protected Admin Routes */}
               <Route element={<ProtectedRoute />}>

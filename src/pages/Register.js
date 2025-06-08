@@ -1,3 +1,4 @@
+// src/pages/Register.jsx
 import React, { useState } from "react";
 import {
   Box,
@@ -5,38 +6,36 @@ import {
   TextField,
   Typography,
   CircularProgress,
-  Alert,
   IconButton,
   InputAdornment,
   Paper,
-  FormControlLabel,
-  Checkbox,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { useMessage } from "../contexts/MessageContext";
 import { useAuth } from "../contexts/AuthContext";
 import bgLarge from "../assets/stageBig-1920x1080.jpg";
 import bgSmall from "../assets/stage-1080x1920.jpg";
 
-const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "", rememberMe: false });
+const Register = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
+    const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { showMessage } = useMessage();
-  const { login: handleLogin } = useAuth();
+  const { register: handleRegister } = useAuth(); // Will add to AuthContext
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-    
-    setSuccess("");
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+	setSuccess("");
   };
 
   const togglePasswordVisibility = () => {
@@ -45,21 +44,29 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    if (form.password !== form.confirmPassword) {
+      showMessage("Passwords don't match");
+      return;
+    }
+
     setLoading(true);
-    setSuccess("");
+	setSuccess("");
+
 
     try {
-      const userData = await handleLogin(form.email, form.password, form.rememberMe);
+      await handleRegister(form.name, form.email, form.password);
       setSuccess("Login successful!");
-
-      if (userData.role === "admin") {
-        navigate("/admin");
-      } else {
-        showMessage("Unauthorized role. Contact support.");
+      navigate("/login");
+    } catch (err) {
+      // For Joi validation errors (400 status)
+      if (err.response?.status === 400) {
+        showMessage(err.response.data.message);
       }
-    } catch (error) {
-      showMessage(error.response.data.message || "Login failed. Please try again.");
-      setSuccess("");
+      // For other errors
+      else {
+        showMessage(err.message || "Registration failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -76,6 +83,7 @@ const Login = () => {
         backgroundImage: { xs: `url(${bgSmall})`, sm: `url(${bgLarge})` },
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        py: 6,
       }}
     >
       <Paper
@@ -83,9 +91,9 @@ const Login = () => {
         sx={{
           width: { xs: "90%", sm: 400 },
           p: 4,
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
           borderRadius: 2,
           textAlign: "center",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
         }}
       >
         <Typography
@@ -101,22 +109,24 @@ const Login = () => {
         >
           EventWheel
         </Typography>
-
         <Typography variant="h6" sx={{ my: 2, color: "text.secondary" }}>
-          Welcome Back! Please Login to create an Event.
+          Welcome! Please Sign Up to start creating amazing events.
         </Typography>
 
-        {success && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {success}
-          </Alert>
-        )}
         <Box component="form" onSubmit={onSubmit}>
+          <TextField
+            name="name"
+            label="Full Name"
+            fullWidth
+            margin="normal"
+            value={form.name}
+            onChange={handleInputChange}
+          />
+
           <TextField
             name="email"
             label="Email"
             type="email"
-            variant="outlined"
             fullWidth
             margin="normal"
             value={form.email}
@@ -127,7 +137,6 @@ const Login = () => {
             name="password"
             label="Password"
             type={showPassword ? "text" : "password"}
-            variant="outlined"
             fullWidth
             margin="normal"
             value={form.password}
@@ -135,7 +144,7 @@ const Login = () => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={togglePasswordVisibility} edge="end">
+                  <IconButton onClick={togglePasswordVisibility}>
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -143,38 +152,39 @@ const Login = () => {
             }}
           />
 
-          {/* ✅ Remember Me Checkbox */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={form.rememberMe}
-                onChange={handleInputChange}
-                name="rememberMe"
-                color="primary"
-              />
-            }
-            label="Remember Me"
-            sx={{ mt: 1, textAlign: "left", width: "100%" }}
+          <TextField
+            name="confirmPassword"
+            label="Confirm Password"
+            type={showPassword ? "text" : "password"}
+            fullWidth
+            margin="normal"
+            value={form.confirmPassword}
+            onChange={handleInputChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={togglePasswordVisibility}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
 
           <Button
             type="submit"
             variant="contained"
             fullWidth
-            sx={{
-              mt: 2,
-              py: 1.5,
-              fontWeight: "bold",
-              textTransform: "uppercase",
-            }}
+            sx={{ mt: 3, py: 1.5 }}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+            {loading ? <CircularProgress size={24} /> : "Register"}
           </Button>
+
           <Typography sx={{ mt: 2 }}>
-            Don't have an account?{" "}
-            <Link component={Link} to="/register">
-              Register
+            Already have an account?{" "}
+            <Link component={Link} to="/login">
+              Login
             </Link>
           </Typography>
         </Box>
@@ -183,4 +193,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

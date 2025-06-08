@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { login as loginService, logoutUser } from "../services/authService";
 import {jwtDecode} from "jwt-decode"; 
+import { register as registerService } from "../services/authService";
 
 export const AuthContext = createContext();
 
@@ -18,6 +19,16 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
+
+//Register Function
+const handleRegister = async (name, email, password) => {
+  setLoading(true);
+  try {
+    await registerService(name, email, password);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Login Function
   const handleLogin = async (email, password, rememberMe) => {
@@ -52,7 +63,15 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login: handleLogin, logout: handleLogout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login: handleLogin,
+        register: handleRegister,
+        logout: handleLogout,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
